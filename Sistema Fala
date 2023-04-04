@@ -1,0 +1,1851 @@
+/****************************
+ *                           *
+ *  TRABALHO FINAL DE AED 1  *
+ *                           *
+ ****************************/
+
+ // Nome: Victória Aparecida & Júlia Guerra
+
+#include <cstring>
+#include <fstream>
+#include <iostream>
+#include <locale.h>
+#include <speechapi_cxx.h>
+#include <stdio.h>
+#include <streambuf>
+#include <string.h>
+#include <string>
+
+#define T 100
+#define MAX_EQUIP 100
+#define MAX_TIPO 100
+#define MAX_DEP 10
+
+using namespace std;
+using namespace Microsoft::CognitiveServices::Speech;
+using namespace Microsoft::CognitiveServices::Speech::Audio;
+
+#pragma warning(disable : 4996)
+
+auto autenticacao = SpeechConfig::FromSubscription(
+    "chave privada", "brazilsouth");
+auto req_textofala = SpeechSynthesizer::FromConfig(autenticacao);
+auto audio_config = AudioConfig::FromDefaultMicrophoneInput();
+auto req_falatexto = SpeechRecognizer::FromConfig(autenticacao, audio_config);
+
+void texto_fala(string Texto) { req_textofala->SpeakTextAsync(Texto).get(); }
+
+/*********************
+ *  Variaveis globais  *
+ *********************/
+
+int i;
+char C[T];
+int contE = 0, contD = 0, contT = 0;
+int cont_listarT = 0;
+int numEquip;
+bool igual;
+
+/******************
+
+  Funcionalidades
+
+*******************/
+
+/*Conversao para string*/
+/*
+int converter_quantidade(char N[]) {
+    int n = 777777;
+
+    if (strcmp(N, "Um.") == 0) {
+        n = 1;
+    }
+    if (strcmp(N, "Dois.") == 0) {
+        n = 2;
+    }
+    if (strcmp(N, "Três.") == 0) {
+        n = 3;
+    }
+    if (strcmp(N, "Quatro.") == 0) {
+        n = 4;
+    }
+    if (strcmp(N, "Cinco.") == 0) {
+        n = 5;
+    }
+    if (strcmp(N, "Seis.") == 0) {
+        n = 6;
+    }
+    if (strcmp(N, "Sete.") == 0) {
+        n = 7;
+    }
+    if (strcmp(N, "Oito.") == 0) {
+        n = 8;
+    }
+    if (strcmp(N, "Nove.") == 0) {
+        n = 9;
+    }
+    if (strcmp(N, "Dez.") == 0) {
+        n = 10;
+    }
+    if (strcmp(N, "Onze.") == 0) {
+        n = 11;
+    }
+    if (strcmp(N, "Doze.") == 0) {
+        n = 12;
+    }
+    if (strcmp(N, "Treze.") == 0) {
+        n = 13;
+    }
+    if (strcmp(N, "Quatorze.") == 0) {
+        n = 14;
+    }
+    if (strcmp(N, "Quinze.") == 0) {
+        n = 15;
+    }
+    if (strcmp(N, "Dezesseis.") == 0) {
+        n = 16;
+    }
+    if (strcmp(N, "Dezessete.") == 0) {
+        n = 17;
+    }
+    if (strcmp(N, "Dezoito.") == 0) {
+        n = 18;
+    }
+    if (strcmp(N, "Dezenove.") == 0) {
+        n = 19;
+    }
+    if (strcmp(N, "Vinte.") == 0) {
+        n = 20;
+    }
+    if (strcmp(N, "Vinte e um.") == 0) {
+        n = 21;
+    }
+    if (strcmp(N, "Vinte e dois.") == 0) {
+        n = 22;
+    }
+    if (strcmp(N, "Vinte e três.") == 0) {
+        n = 23;
+    }
+    if (strcmp(N, "Vinte e quatro.") == 0) {
+        n = 24;
+    }
+    if (strcmp(N, "Vinte e cinco.") == 0) {
+        n = 25;
+    }
+    if (strcmp(N, "Vinte e seis.") == 0) {
+        n = 26;
+    }
+    if (strcmp(N, "Vinte e sete.") == 0) {
+        n = 27;
+    }
+    if (strcmp(N, "Vinte e oito.") == 0) {
+        n = 28;
+    }
+    if (strcmp(N, "Vinte e nove.") == 0) {
+        n = 29;
+    }
+    if (strcmp(N, "Trinta.") == 0) {
+        n = 30;
+    }
+    if (strcmp(N, "Trinta e um.") == 0) {
+        n = 31;
+    }
+
+    return n;
+}
+
+// funcao que converte o codigo(int) pra string
+int converter_codigo(char codigo[]) {
+    int CODIGO = 0;
+
+    if (strcmp(codigo, "1") == 0) {
+        CODIGO = 1;
+    }
+    if (strcmp(codigo, "2") == 0) {
+        CODIGO = 2;
+    }
+    if (strcmp(codigo, "3") == 0) {
+        CODIGO = 3;
+    }
+    if (strcmp(codigo, "4") == 0) {
+        CODIGO = 4;
+    }
+    if (strcmp(codigo, "5") == 0) {
+        CODIGO = 5;
+    }
+    if (strcmp(codigo, "6") == 0) {
+        CODIGO = 6;
+    }
+    if (strcmp(codigo, "7") == 0) {
+        CODIGO = 7;
+    }
+    if (strcmp(codigo, "8") == 0) {
+        CODIGO = 8;
+    }
+    if (strcmp(codigo, "9") == 0) {
+        CODIGO = 9;
+    }
+    if (strcmp(codigo, "10") == 0) {
+        CODIGO = 10;
+    }
+    if (strcmp(codigo, "11") == 0) {
+        CODIGO = 11;
+    }
+    if (strcmp(codigo, "12") == 0) {
+        CODIGO = 12;
+    }
+    if (strcmp(codigo, "13") == 0) {
+        CODIGO = 13;
+    }
+    if (strcmp(codigo, "14") == 0) {
+        CODIGO = 14;
+    }
+    if (strcmp(codigo, "15") == 0) {
+        CODIGO = 15;
+    }
+    if (strcmp(codigo, "16") == 0) {
+        CODIGO = 16;
+    }
+    if (strcmp(codigo, "17") == 0) {
+        CODIGO = 17;
+    }
+    if (strcmp(codigo, "18") == 0) {
+        CODIGO = 18;
+    }
+    if (strcmp(codigo, "19") == 0) {
+        CODIGO = 19;
+    }
+    if (strcmp(codigo, "20") == 0) {
+        CODIGO = 20;
+    }
+    if (strcmp(codigo, "21") == 0) {
+        CODIGO = 21;
+    }
+    if (strcmp(codigo, "22") == 0) {
+        CODIGO = 22;
+    }
+    if (strcmp(codigo, "23") == 0) {
+        CODIGO = 23;
+    }
+    if (strcmp(codigo, "24") == 0) {
+        CODIGO = 24;
+    }
+    if (strcmp(codigo, "25") == 0) {
+        CODIGO = 25;
+    }
+    if (strcmp(codigo, "26") == 0) {
+        CODIGO = 26;
+    }
+    if (strcmp(codigo, "27") == 0) {
+        CODIGO = 27;
+    }
+    if (strcmp(codigo, "28") == 0) {
+        CODIGO = 28;
+    }
+    if (strcmp(codigo, "29") == 0) {
+        CODIGO = 29;
+    }
+    if (strcmp(codigo, "30") == 0) {
+        CODIGO = 30;
+    }
+    if (strcmp(codigo, "31") == 0) {
+        CODIGO = 31;
+    }
+
+    return CODIGO;
+}
+*/
+
+string fala_texto() {
+    auto resultado = req_falatexto->RecognizeOnceAsync().get();
+    // cout << resultado->Text + "\n";
+    return resultado->Text;
+}
+
+// Procedimento que altera as string
+void alterar(char nome1[], char nome2[]) {
+    // Verifica se o tamanho das strings sao iguais
+    if (strlen(nome1) == strlen(nome2)) {
+        strcpy(nome1, nome2);
+
+        // Verifica se a primeira string eh maior que a segunda
+    }
+    else if (strlen(nome1) > strlen(nome2)) {
+        strcpy(nome1, nome2);
+        nome1[strlen(nome2)] = '\0';
+
+        // Caso a segunda string ser maior que a primeira
+    }
+    else {
+        strncpy(nome1, nome2, strlen(nome2));
+    }
+}
+
+/***********
+
+ *  CLASSES  *
+
+***********/
+
+/*Uma classe de tipo de equipamentos, na qual, armazena:
+codigo e a descrição*/
+class TipoEquipamento {
+public:
+    char codigo[T];
+    char descricao[T];
+    bool nao_existe = false;
+
+    /*
+    Descricao: zerando as variaveis
+    */
+    TipoEquipamento() {
+        strcmp(codigo, "\0");
+        strcpy(descricao, "\nDescricao\n");
+    }
+    /*Procedimento para mostar o tipo de equipamento*/
+    void mostrar_tipoEquipamento() {
+        cout << codigo << "\t";
+        cout << descricao << endl;
+    }
+};
+
+/*Uma classe de departamento, contendo as variaveis que armazena:
+codigo, nome, descrição e localização do produto*/
+class Departamento {
+public:
+    bool nao_existe = false;
+    char codigo[T];
+    char nome[T];
+    char descricao[T];
+    char localizacao[T];
+
+    /*
+    Descricao: zerando as variaveis
+    */
+    Departamento() {
+        /*DADOS de acordo com a tabela "\0" ultimo caractere*/
+        strcmp(codigo, "\0");
+        strcpy(nome, "\n Nome:\n");
+        strcpy(descricao, "\nDescricao:\n");
+        strcpy(localizacao, "\0");
+    }
+
+    /*
+    Descricao: Alteração dos valores dos atributos
+    */
+    void setDepartamento(Departamento Dep) {
+        // Altera:
+
+        // codigo
+        // Dep.codigo = codigo;
+        alterar(codigo, Dep.codigo);
+
+        // nome
+        alterar(nome, Dep.nome);
+
+        // descricao
+        alterar(descricao, Dep.descricao);
+
+        // localizacao
+        alterar(localizacao, Dep.localizacao);
+    }
+    /*Procedimento para mostar os valores*/
+
+    void mostrar_departamento() {
+        cout << codigo << "\t";
+        cout << nome << "\t";
+        cout << descricao << "\t";
+        cout << localizacao << endl;
+    }
+};
+
+/*Uma classe de equipamento que armazena:
+codigo, nome e preço do produto*/
+class Equipamentos {
+public:
+    char codigo[T];
+    char nome[T];
+    char preco[T];
+    bool nao_existe = false;
+    // Para nao haver comflito na hora de usar nomes iguais nas variveis
+    TipoEquipamento* Tipo = new TipoEquipamento();
+    Departamento* Dep = new Departamento();
+
+    /*
+    Descricao:procedimento que atribui valor
+    ao objeto do Tipo de Equipamento
+    */
+    void setTipo(TipoEquipamento Tipo) {
+        // Atribuicao do valor do codigo
+        alterar(this->Tipo->codigo, Tipo.codigo);
+
+        // Atribuicao do valor da descricao
+        alterar(this->Tipo->descricao, Tipo.descricao);
+    }
+
+    /*
+    Descricao: procedimento, na qual, atribui valor
+    ao objeto do Departamento
+    */
+
+    // facilitar o uso de nomes iguais de variaveis
+    void setDpto(Departamento Dep) {
+        // Atribuicao do codigo
+        alterar(this->Dep->codigo, Dep.codigo);
+
+        // Atribuicao do nome
+        alterar(this->Dep->nome, Dep.nome);
+
+        // Atribuicao do descricao
+        alterar(this->Dep->descricao, Dep.descricao);
+
+        // Atribuicao do localizacao
+        alterar(this->Dep->localizacao, Dep.localizacao);
+    }
+
+    /*Procedimento para mostrar os valores*/
+    void mostrar_equipamento() {
+        cout << nome << "\t";
+        cout << codigo << "\t";
+        cout << preco << "\t";
+        cout << Dep->nome << "\t";
+        cout << Tipo->descricao << "\n";
+    }
+};
+
+TipoEquipamento Tipo[MAX_TIPO];
+Equipamentos Equip[MAX_EQUIP];
+Departamento Dep[MAX_DEP];
+
+/**************************
+
+   TIPO DE EQUIPAMENTO
+
+***************************/
+
+// Funcao do tipo bool que verifica se existe cadastro de tipo de equipamento
+bool verific_cadastro_tipo() {
+    if (contT > 0)
+        return true;
+    else
+        return false;
+}
+
+/*Procedimento para cadastrar equipamento*/
+void cadastro_tipo() {
+    int i, n, I;
+    //    char N[1];
+    bool r = verific_cadastro_tipo();
+
+    if (contT < MAX_TIPO) {
+
+        // Entrada do codigo
+        cout << "Digite o codigo: ";
+        cin >> Tipo[contT].codigo;
+        fflush(stdin);
+
+        // Entrada da descricao
+        cout << "Digite uma descricao para o tipo: ";
+        cin >> Tipo[contT].descricao;
+        fflush(stdin);
+
+        // contador
+        contT++;
+        // Caso o limite do vetor tenha alcancado
+    }
+    else {
+        cout << "Limite alcancado!!";
+        i = 0;
+    }
+
+    cout << "\nTipos de Equipamento Cadastrados!!\n";
+}
+// Procedimento que faz o listamento de tipos de equipamentos
+void listar_tipo() {
+    for (i = 0; i < contT; i++) {
+        if (Tipo[i].nao_existe == false) {
+            // Mostrar || Falar pro usuario os tipos
+            cout << "Tipo: " << i + 1 << endl << endl;
+            // Mostrar || Falar pro usuario o codigo
+            cout << "Codigo: " << Tipo[i].codigo << endl << endl;
+            // Mostrar || Falar pro usuario a descricao
+            cout << "Descriçao: " << Tipo[i].descricao << endl << endl;
+            cout << endl;
+        }
+    }
+}
+/*Procedimento que atualiza os tipos de equipamento*/
+void atualiza_Tipo() {
+    char cod[T];
+    bool r;
+
+    // chamando a funcao que verifica
+    r = verific_cadastro_tipo();
+    // verificacao
+    if (r == 0) {
+        cout << "Ops!!Nao ha nenhum  tipo de equipamento cadastrado." << endl
+            << "Insira um tipo de equipamento primeiro para habilitar essa "
+            "funcionalidade.";
+    }
+    // Entrada do codigo de tipo que o usuario deseja atualizar
+    cout << "Digite o codigo do tipo de equipamento";
+    cin >> cod;
+    fflush(stdin);
+
+    // fazendo a atualizacao
+    for (int i = 0; i < contT; i++) {
+        if (strcmp(Tipo[i].codigo, cod) == 0) {
+            // atualizando a descricao
+            cout << "Digite a nova descricao: ";
+            cin >> Tipo[i].descricao;
+        }
+    }
+}
+
+// Procedimento que exclui um tipo de equipamento
+void excluir_tipo() {
+    int i;
+    char codigo[T];
+    igual = false;
+
+    // Entrada do codigo do eqipamento que o usuario deseja excluir
+    cout << "Digite o codigo do Equipamento:" << endl;
+    cin >> codigo;
+
+    for (i = 0; i < MAX_TIPO; i++) {
+        // verificacao se o equipamento existe
+        if ((strcmp(Tipo[i].codigo, codigo) == 0) && Tipo[i].nao_existe == false) {
+            igual = true;
+            Tipo[i].nao_existe = true;
+            // mensagem pro usuario
+            printf("\nTipo de Equipamento deletado do sistema\n");
+        }
+        if (igual == true) {
+            break;
+        }
+    }
+    // caso o equipamento nao seja encontrado no sistema
+    if (igual == false) {
+        // mensagem pro usuario
+        cout << "Esse Tipo nao foi cadasatrado/encontrado no sistema." << endl;
+    }
+}
+
+/**************************
+
+   TIPO DE EQUIPAMENTO
+    COM API DE FALA
+
+***************************/
+// Funcao do tipo bool que verifica se existe cadastro de tipo de equipamento
+bool verific_cadastro_tipo_fala() {
+    if (contT > 0)
+        return true;
+    else
+        return false;
+}
+
+/*Procedimento para cadastrar tipo de equipamento*/
+void cadastro_tipo_fala() {
+    int i, I;
+    string N, codigo;
+    const char* n;
+    bool r = verific_cadastro_tipo();
+
+    if (contT < MAX_TIPO) {
+
+        // Entrada do codigo
+        cout << "Diga o codigo";
+        texto_fala("Fale o codigo: ");
+        N = fala_texto();
+        n = &N[0];
+        strcpy(Tipo[contT].codigo, n);
+        fflush(stdin);
+
+        // Entrada da descricao
+        cout << "Fale uma descricao" << endl;
+        texto_fala("Fale uma descricao para o tipo: ");
+        N = fala_texto();
+        n = &N[0];
+        strcpy(Tipo[contT].descricao, n);
+        fflush(stdin);
+
+        // contador
+        contT++;
+        // Caso o limite do vetor tenha alcancado
+    }
+    else {
+        cout << "Limite alcancado!!";
+        texto_fala("Limite alcancado");
+        i = 0;
+    }
+    cout << "\nTipos de Equipamento Cadastrados!!\n";
+    texto_fala("Tipos de Equipamento Cadastrados");
+}
+
+// Procedimento que faz o listamento de tipos de equipamentos
+void listar_tipo_fala() {
+    for (int i = 0; i < contT; i++) {
+        string s;
+        if (Tipo[i].nao_existe == false) {
+
+            s = Tipo[i].codigo; // convertendo o vetor char pra uma string
+            cout << "Codigo: " << Tipo[i].codigo << endl;
+            texto_fala("Codigo: " + s);
+            s = Tipo[i].descricao;
+            cout << "Descricao: " << Tipo[i].descricao << endl;
+            texto_fala("Descriçao: " + s);
+        }
+    }
+}
+/*Procedimento que atualiza os tipos de equipamento*/
+void atualiza_Tipo_fala() {
+    string c;
+    char* cod;
+    bool r;
+    // verificacao
+
+    r = verific_cadastro_tipo();
+    if (r == 0) {
+        cout << "Ops!!Nao ha nenhum  tipo de equipamento cadastrado." << endl
+            << "Insira um tipo de equipamento primeiro para habilitar essa "
+            "funcionalidade."
+            << endl;
+        texto_fala("Ops!!Nao ha nenhum  tipo de equipamento cadastrado.");
+        texto_fala("Diga um tipo de equipamento primeiro para habilitar essa "
+            "funcionalidade.");
+    }
+    cout << "Digite o codigo do tipo de equipamento" << endl;
+    texto_fala("Diga o codigo do tipo de equipamento");
+    c = fala_texto();
+    cod = &c[0];
+    fflush(stdin);
+
+    for (int i = 0; i < contT; i++) {
+        if (strcmp(Tipo[i].codigo, cod) == 0) {
+            cout << "Digite a nova descricao: " << endl;
+            texto_fala("Diga a nova descricao: ");
+            c = fala_texto();
+            cod = &c[0];
+            strcpy(Tipo[i].descricao, cod);
+            fflush(stdin);
+        }
+    }
+}
+
+// Procedimento que exclui um tipo de equipamento
+void excluir_tipo_fala() {
+    int i;
+    string c;
+    char* codigo;
+
+    igual = false;
+
+    cout << "Diga o codigo do Equipamento:" << endl;
+    texto_fala("Diga o codigo do Equipamento:");
+    c = fala_texto();
+    codigo = &c[0];
+    fflush(stdin);
+
+    for (i = 0; i < MAX_TIPO; i++) {
+        if (strcmp(codigo, Tipo[i].codigo) == 0 && Tipo[i].nao_existe == false) {
+            igual = true;
+            Tipo[i].nao_existe = true;
+            texto_fala("Tipo de Equipamento deletado do sistema");
+            printf("\nTipo de Equipamento deletado do sistema\n");
+        }
+        if (igual == true) {
+            break;
+        }
+    }
+    if (igual == false) {
+        cout << "Esse Tipo nao foi cadasatrado/encontrado no sistema." << endl;
+        texto_fala("Esse Tipo nao foi cadasatrado/encontrado no sistema.");
+    }
+}
+
+/**********************
+
+ *  EQUIPAMENTO      *
+
+***********************/
+
+// Função do tipo Bool que verifica se o Equipamento existe
+bool verific_cadastro_equip(int ContE) {
+    if (contE > 0)
+        return true;
+    else
+        return false;
+}
+
+// procedimento que faz o cadastro de equipe
+void cadastro_equip() {
+    // Declaracao das variaveis
+    int i, j, N;
+    char n[T], num[T];
+    char* codigo, r;
+    string C, R;
+    float preco;
+
+    // verificacao se existe um tipo de quipamento
+    if (verific_cadastro_tipo()) {
+        cout << "Ops!!Nao ha nenhum  tipo de equipamento cadastrado." << endl
+            << "Insira um tipo de equipamento primeiro para habilitar essa "
+            "funcionalidade.";
+
+    }
+    else {
+
+        if (contE < MAX_EQUIP) {
+            // nome do setor
+            cout << "Equipamento" << endl;
+
+            // Entrada do codigo
+            cout << "Digite um codigo: ";
+            cin >> Equip[contE].codigo;
+            fflush(stdin);
+
+            // Entrada do nome
+            cout << "Digite um nome: ";
+            cin >> Equip[contE].nome;
+            fflush(stdin);
+
+            // Entrada do preco
+            cout << "Digite o preco do equipamento: ";
+            cin >> Equip[contE].preco;
+            fflush(stdin);
+
+            // Entrada do codigo do tipo de equipamento
+            cout << endl << "Digite o codigo do tipo de equipamento pertence: ";
+            cin >> num;
+            fflush(stdin);
+
+            // Localiza o codigo do tipo de equipamento
+            for (i = 0; i <= MAX_TIPO; i++) {
+                if (strcmp(num, Tipo[i].codigo) == 0) {
+                    // Agregando as classes
+                    Equip[MAX_TIPO].setTipo(Tipo[i]);
+                    // falta a verificacao se existe o tipo
+                }
+            }
+            // Mostra os departamentos disponiveis
+            cout << endl << "Departamentos disponiveis: " << endl;
+            for (j = 0; j <= MAX_DEP; j++) {
+                Dep[i].mostrar_departamento();
+            }
+            contE++;
+        }
+        else {
+            cout << "Limite alcancado!!" << endl;
+            N = 0;
+        }
+    }
+    cout << "Equipamentos Cadastrados!!" << endl;
+}
+
+// Procedimento que faz o listamento  de equipamentos
+void listar_equip() {
+    for (i = 0; i < contE; i++) {
+        if (Equip[i].nao_existe == false) {
+            // Equipamento
+            cout << "Equipamento: " << i + 1 << endl;
+            // Codigo do equipamento
+            cout << "Codigo: " << Equip[i].codigo << endl;
+            // nome
+            cout << "Nome: " << Equip[i].nome << endl;
+            // preco
+            cout << "Preço: " << Equip[i].preco << endl;
+        }
+    }
+}
+
+/*Procedimento que atualiza os equipamentos*/
+void atualiza_Equip() {
+    char cod[T];
+    bool r;
+
+    // chamdno a funcao que faz a verificacao
+    r = verific_cadastro_equip(contE);
+
+    // Entrada do codigo do equioamento que o usuario deseja atualizar
+    cout << "Digite o codigo do equipamento" << endl;
+    cin >> cod;
+
+    // fazendo a atualizacao
+    for (int i = 0; i < contE; i++) {
+        if (strcmp(Equip[i].codigo, cod) == 0) {
+            // Novo nome
+            cout << "Digite o novo nome: ";
+            cin >> Equip[i].nome;
+            // novo preco
+            cout << "Digite o novo preco: ";
+            cin >> Equip[i].preco;
+        }
+    }
+}
+
+/*Procedimento pata excluir equip*/
+void excluir_equip() {
+    int i;
+    char codigo[T];
+    igual = false;
+
+    // entrada do codigo do equipamento que o usuario deseja excluir do sistema
+    cout << "Digite o codigo do Equipamento:" << endl;
+    cin >> codigo;
+    fflush(stdin);
+
+    // Excluindo EQUIP
+    for (i = 0; i < MAX_EQUIP; i++) {
+        // verificacao se o equipamento que o usuario deseja deletar existe
+        if (strcmp(codigo, Equip[i].codigo) == 0 && Equip[i].nao_existe == false) {
+            igual = true;
+            Equip[i].nao_existe = true;
+            // mensagem de retorno
+            printf("\nEquipamento deletado do sistema\n");
+        }
+        if (igual == true) {
+            break;
+        }
+    }
+    // caso o tipo nao exista
+    if (igual == false) {
+        cout << "Esse Tipo nao foi cadasatrado/encontrado no sistema." << endl;
+        texto_fala("Esse Tipo nao foi cadasatrado/encontrado no sistema");
+    }
+}
+
+/******************
+*    EQUIPAMENTO
+*      COM API
+/*****************/
+
+/*Procedimento para fazer o C
+cadastro  do Equipamento*/
+void cadastro_equip_fala() {
+    string N;
+    char* n;
+    int i, j, codigo, num;
+    float preco;
+
+    // verificacao se existe um tipo de quipamento
+    if (verific_cadastro_tipo_fala()) {
+        cout << "Ops!!Nao ha nenhum  tipo de equipamento cadastrado." << endl;
+        cout << "diga um tipo de equipamento primeiro para habilitar essa "
+            "funcionalidade."
+            << endl;
+        texto_fala("Ops!!Nao ha nenhum  tipo de equipamento cadastrado.");
+        texto_fala("diga um tipo de equipamento primeiro para habilitar essa "
+            "funcionalidade.");
+    }
+    else {
+
+        if (contE < MAX_EQUIP) {
+            texto_fala("Equipamento");
+            // Entrada do codigo
+            cout << "Diga um codigo" << endl;
+            texto_fala("Diga um codigo: ");
+            N = fala_texto();
+            n = &N[0];
+            strcpy(Equip[contE].codigo, n);
+            fflush(stdin);
+
+            // Entrada do nome
+            cout << "Diga um nome" << endl;
+            texto_fala("Diga um nome: ");
+            N = fala_texto();
+            n = &N[0];
+            strcpy(Equip[contE].nome, n);
+            fflush(stdin);
+            cout << "Diga o preco do equipamento" << endl;
+            // Entrada do preco
+            texto_fala("Diga o preco do equipamento: ");
+
+            N = fala_texto();
+            n = &N[0];
+            strcpy(Equip[contE].preco, n);
+            fflush(stdin);
+
+            // Entrada do codigo do tipo de equipamento
+            cout << "Diga o codigo do tipo de equipamento pertence" << endl;
+            texto_fala("Diga o codigo do tipo de equipamento pertence: ");
+
+            N = fala_texto();
+            n = &N[0];
+            fflush(stdin);
+
+            // Localiza o codigo do tipo de equipamento
+            for (j = 0; j < contT; j++) {
+                if (strcmp(n, Tipo[j].codigo) == 0) {
+                    // Agregando as classes
+                    Equip[MAX_TIPO].setTipo(Tipo[j]);
+                    // falta a verificacao se existe o tipo
+                }
+            }
+            // Mostra os departamentos disponiveis
+            texto_fala("Departamentos disponiveis: ");
+            for (j = 0; j <= contD; j++) {
+                Dep[j].mostrar_departamento();
+            }
+            contE++;
+        }
+        else {
+            texto_fala("Limite alcancado!!");
+        }
+
+        texto_fala("Equipamentos Cadastrados!!");
+    }
+}
+
+// Procedimento que faz o listamento  de equipamentos
+void listar_equip_fala() {
+    string s;
+    for (int i = 0; i < contE; i++) {
+        if (Equip[i].nao_existe == false) {
+
+            s = Equip[i].codigo; // convertendo o vetor char pra uma string
+            texto_fala("Codigo: " + s);
+            s = Equip[i].nome;
+            texto_fala("Nome: " + s);
+            s = Equip[i].preco; // convertendo o vetor char pra uma string
+            texto_fala("Preço: " + s);
+        }
+    }
+}
+
+/*Procedimento que atualiza os equipamentos*/
+void atualiza_Equip_fala() {
+    string c;
+    char* C;
+    int cod;
+    bool r;
+
+    // verificar se tem o equipamento no sistema
+    // chama a funcao que faz a verificacao
+    r = verific_cadastro_equip(contE);
+
+    texto_fala("Diga o codigo do tipo de equipamento");
+    c = fala_texto();
+    C = &c[0];
+    for (int i = 0; i < contE; i++) {
+        if (strcmp(Equip[i].codigo, C) == 0) {
+            cout << "Diga o novo nome:" << endl;
+            texto_fala("Diga o novo nome: ");
+            c = fala_texto();
+            C = &c[0];
+            strcpy(Equip[i].nome, C);
+            cout << "Diga o novo preco:" << endl;
+            texto_fala("Diga o novo preco: ");
+            c = fala_texto();
+            C = &c[0];
+            strcpy(Equip[i].preco, C);
+        }
+    }
+}
+/*Procedimento pata excluir equip*/
+void excluir_equip_fala() {
+    int i;
+    string c;
+    char* codigo;
+    igual = false;
+
+    cout << "Diga o codigo do Equipamento" << endl;
+    texto_fala("Diga o codigo do Equipamento:");
+    c = fala_texto();
+    codigo = &c[0];
+
+    for (i = 0; i < MAX_TIPO; i++) {
+        if (strcmp(codigo, Equip[i].codigo) == 0 && Equip[i].nao_existe == false) {
+            igual = true;
+            Equip[i].nao_existe = true;
+            printf("\nTipo de Equipamento deletado do sistema\n");
+            texto_fala("Tipo de Equipamento deletado do sistema");
+        }
+        if (igual == true) {
+            break;
+        }
+    }
+    if (igual == false) {
+        cout << "Esse Tipo nao foi cadasatrado/encontrado no sistema." << endl;
+        texto_fala("Esse Tipo nao foi cadasatrado/encontrado no sistema.");
+    }
+}
+
+/******************
+ *  DEPARTAMENTO   *
+ ********************/
+
+ // Função do tipo bool para verificar se existe cadastro de departamento
+bool verific_cadastro_dep() {
+    if (contD > 0)
+        return true;
+    else
+        return false;
+}
+
+/*Procedimento que faz o cadastro de departamento*/
+void cadastro_dept() {
+    int N;
+    char codigo[T], n[T], nome[T], descricao[T], Localizacao[T];
+
+    if (contD < MAX_DEP) {
+        // Entrada do codigo
+        cout << "Insira o codigo: ";
+        cin >> Dep[contD].codigo;
+        fflush(stdin);
+
+        // Entrada do nome
+        cout << "Digite o nome: ";
+        cin >> Dep[contD].nome;
+        fflush(stdin);
+
+        // Entrada da descricao
+        cout << "Digite uma descricao: ";
+        cin >> Dep[contD].descricao;
+        fflush(stdin);
+
+        // Entrada da localizacao
+        cout << "Digite uma localizacao: ";
+        cin >> Dep[contD].localizacao;
+        fflush(stdin);
+
+        contD++;
+
+        // limite do vetor alcancado
+    }
+    else {
+        cout << "Limite alcancado!!" << endl;
+        N = 0;
+    }
+    cout << "Departamento Cadastrado!!" << endl;
+}
+
+// PROCEDIMENTO QUE LISTA OS DEPARTAMENTOS EXISTENTES
+void listar_Depto() {
+    cout << endl;
+
+    for (i = 0; i < MAX_DEP; i++) {
+        if (Dep[i].nao_existe == false) {
+            // Departamento
+            cout << "Departamento: " << i + 1 << endl;
+            // codigo
+            cout << "Codigo: " << Dep[i].codigo << endl;
+            // nome
+            cout << "Nome: " << Dep[i].nome << endl;
+            // localizcao
+            cout << "Localizacao: " << Dep[i].localizacao << endl;
+            // Descricao
+            cout << "Descricao: " << Dep[i].descricao << endl;
+        }
+    }
+}
+/*Procedimento que atualiza o departamento*/
+void atualiza_Dep() {
+    int i = 0, t;
+    string c;
+    char* codigo, cod[T];
+    int CODIGO;
+
+    // Entrada do codigo do departamento que o usuario deseja atualizar
+    cout << "Digite o codigo do departamento" << endl;
+    cin >> cod;
+
+    for (i = 0; i < MAX_DEP; i++) {
+        if (contD < MAX_DEP && Dep[i].nao_existe == false) {
+            if (strcmp(cod, Dep[i].codigo) == 0) {
+                // nome
+                cout << "Digite o novo nome " << endl;
+                cin >> Dep[i].nome;
+                // descricao
+                cout << "Digite a nova descricao";
+                cin >> Dep[i].descricao;
+                // localizacao
+                cout << "Digite a nova localizacao";
+                cin >> Dep[i].localizacao;
+            }
+        }
+        else {
+            cout << "Departamento não encontrado ou excluido\n" << endl;
+        }
+    }
+}
+
+// Procediemento que
+void excluir_Depto() {
+    char codigo[T];
+    igual = false;
+
+    // Entrada do codigo do departamento que o usuario deseja excluir
+    printf("Digite o codigo do Departamento:\t");
+    cin >> codigo;
+
+    for (i = 0; i < MAX_DEP; i++) {
+        if (strcmp(codigo, Dep[i].codigo) == 0 && Dep[i].nao_existe == false) {
+            igual = true;
+
+            Dep[i].nao_existe = true;
+
+            if (Dep[i].nao_existe == true) {
+                cout << "Item deletado" << endl;
+            }
+        }
+        if (igual == true) {
+            break;
+        }
+    }
+    if (igual == false) {
+        printf("\nItem inexistente ou nao encontrado.\n");
+    }
+}
+
+/********************
+
+ *  DEPARTAMENTO
+  COM API DE FALA*
+
+********************/
+
+// Funcao do tipo bool que verifica se existe cadastro de tipo de equipamento
+bool verific_cadastro_dep_fala() {
+    if (contT > 0)
+        return true;
+    else
+        return false;
+}
+
+/*Procedimento para cadastrar tipo de equipamento*/
+void cadastro_dep_fala() {
+    int i;
+    string N, codigo;
+    char* n;
+    bool r = verific_cadastro_dep_fala();
+
+    if (contD < MAX_TIPO) {
+
+        // Entrada do codigo
+        texto_fala("Diga o codigo: ");
+        // cin >> Tipo[contT].codigo;
+        N = fala_texto();
+        n = &N[0];
+        strcpy(Dep[contD].codigo, n);
+        fflush(stdin);
+
+        // Entrada nome
+        cout << "Diga o nome" << endl;
+        texto_fala("Diga o nome");
+        N = fala_texto();
+        n = &N[0];
+        strcpy(Dep[contD].nome, n);
+        fflush(stdin);
+
+        // Entrada localizaçao
+        cout << "Diga a localizacao" << endl;
+        texto_fala("Diga a localizaçao");
+        N = fala_texto();
+        n = &N[0];
+        strcpy(Dep[contD].localizacao, n);
+        fflush(stdin);
+
+        // Entrada da descricao
+        cout << "Diga uma descricao para o departamento: " << endl;
+        texto_fala("Diga uma descricao para o departamento: ");
+        N = fala_texto();
+        n = &N[0];
+        strcpy(Dep[contD].descricao, n);
+        fflush(stdin);
+
+        // contador
+        contD++;
+        // Caso o limite do vetor tenha alcancado
+    }
+    else {
+        texto_fala("Limite alcancado");
+        cout << "Limite alcancado!!";
+        i = 0;
+    }
+    cout << "Departamento Cadastrados" << endl;
+    texto_fala("\nDepartamento Cadastrados");
+    // }
+}
+// Procedimento que faz o listamento de tipos de equipamentos
+void listar_dep_fala() {
+    for (int i = 0; i < contD; i++) {
+        string s;
+        if (Dep[i].nao_existe == false) {
+
+            s = Dep[i].codigo; // convertendo o vetor char pra uma string
+            cout << "Codigo:" << Dep[i].codigo << endl;
+            texto_fala("Codigo: " + s);
+            s = Dep[i].descricao;
+            cout << "Descricao: " << Dep[i].descricao << endl;
+            texto_fala("Descriçao: " + s);
+        }
+    }
+}
+/*Procedimento que atualiza os tipos de equipamento*/
+void atualiza_dep_fala() {
+    string c;
+    char* cod;
+    bool r;
+    // verificacao
+    r = verific_cadastro_dep();
+    if (r == 0) {
+        cout << "Ops!!Nao ha nenhum  tipo de equipamento cadastrado." << endl;
+        texto_fala("Ops!!Nao ha nenhum  tipo de equipamento cadastrado.");
+        cout << "Insira um tipo departamento primeiro para habilitar essa "
+            "funcionalidade."
+            << endl;
+        texto_fala("Diga um departamento primeiro para habilitar essa "
+            "funcionalidade.");
+    }
+    cout << "Diga o codigo do departamento" << endl;
+    texto_fala("Diga o codigo do deartamento");
+    c = fala_texto();
+    cod = &c[0];
+    fflush(stdin);
+
+    for (int i = 0; i < contD; i++) {
+        if (strcmp(Dep[i].codigo, cod) == 0)
+            cout << "Diga o codigo" << endl;
+        texto_fala("Diga o codigo do departamento");
+        cin >> cod;
+        for (int i = 0; i < contD; i++) {
+            if (strcmp(Dep[i].codigo, cod) == 0) {
+                cout << "Diga o novo nome" << endl;
+                texto_fala("Diga o novo nome: ");
+                c = fala_texto();
+                cod = &c[0];
+                strcpy(Dep[i].descricao, cod);
+                cout << "Diga o novo nome: " << endl;
+                texto_fala("Diga o novo nome: ");
+                c = fala_texto();
+                cod = &c[0];
+                strcpy(Dep[i].nome, cod);
+                cout << "Diga a nova localizacao" << endl;
+                texto_fala("Diga a nova localizacao: ");
+                c = fala_texto();
+                cod = &c[0];
+                strcpy(Dep[i].localizacao, cod);
+                fflush(stdin);
+            }
+        }
+    }
+}
+// Procedimento que exclui um tipo de equipamento
+void excluir_dep_fala() {
+    int i;
+    string c;
+    char* codigo;
+
+    igual = false;
+
+    cout << "Diga o codigo do Departamento" << endl;
+    texto_fala("Diga o codigo do Departamento:");
+    c = fala_texto();
+    codigo = &c[0];
+    fflush(stdin);
+
+    for (i = 0; i < MAX_TIPO; i++) {
+        if (strcmp(codigo, Dep[i].codigo) == 0 && Dep[i].nao_existe == false) {
+            igual = true;
+            Dep[i].nao_existe = true;
+            texto_fala("Departamento Deletado do sistema");
+            printf("\nDepartamento deletado do sistema\n");
+        }
+        if (igual == true) {
+            break;
+        }
+    }
+    if (igual == false) {
+        cout << "Esse departamento nao foi cadasatrado/encontrado no sistema."
+            << endl;
+        texto_fala("Esse departamento nao foi cadasatrado/encontrado no sistema.");
+    }
+}
+
+/*************
+
+*  ARQUIVOS  *
+
+*************/
+
+/*criando arquivo*/
+void backup(int numEquip) {
+    FILE* arquivo;
+    char titulo[T];
+
+    cout << "Digite o nome do seu arquivo: ";
+    texto_fala("Digite o nome do seu arquivo: ");
+    cin >> titulo;
+    fflush(stdin);
+
+    // Inclui a extensao de arquivo binario
+    strcat(titulo, ".bin");
+
+    // Abrir arquivo
+    arquivo = fopen(titulo, "wb");
+
+    // Validar arquivo
+    try {
+        if (!arquivo) {
+            throw 0;
+        }
+        else {
+            // Grava o tamanho do vetor
+            fwrite(&numEquip, sizeof(int), 1, arquivo);
+
+            // Gravar informacoes
+            fwrite(Equip, sizeof(Equipamentos), numEquip + 1, arquivo);
+
+            cout << "Backup concluido";
+        }
+
+        // erro no arquivo
+    }
+    catch (int error) {
+        if (error == 0) {
+            cout << "Erro ao abrir o arquivo";
+            texto_fala("Erro ao abrir o arquivo");
+        }
+    }
+
+    // Fechar o arquivo
+    fclose(arquivo);
+}
+
+/*Arquivo que armazena dados do equipamento*/
+void listar_arquivo() {
+    FILE* arquivo;
+
+    Equipamentos Equip[10];
+
+    char titulo[T];
+    int limite;
+
+    // nome do arquivo
+    cout << "Digite o nome do arquivo: ";
+    texto_fala("Digite o nome do arquivo");
+    cin >> titulo;
+    fflush(stdin);
+
+    // extensao de arquivo binario
+    strcat(titulo, ".bin");
+
+    // Abre o arquivo
+    arquivo = fopen(titulo, "rb");
+
+    // Valida o arquivo
+    try {
+        if (!arquivo) {
+            throw 0;
+        }
+        else {
+            // Le o tamanho do vetor no arquivo
+            fread(&limite, sizeof(int), 1, arquivo);
+
+            limite++;
+
+            // Le o arquivo
+            fread(Equip, sizeof(Equipamentos), limite, arquivo);
+
+            // Exibe o conteudo lido dentro do arquivo
+            for (i = 0; i < limite; i++) {
+                Equip[i].mostrar_equipamento();
+            }
+        }
+
+        // Caso der erro na abertura do arquivo
+    }
+    catch (int erro) {
+        if (erro == 0) {
+            cout << "Erro na abertura do arquivo";
+            texto_fala("Erro na abertura do arquivo");
+        }
+    }
+
+    // Fecha o arquivo
+    fclose(arquivo);
+}
+
+/***************************
+     MENUS  NORMAIS  *
+  falta adiciona algumas
+  chamadas de procedimentos
+****************************/
+
+// Menu para departamento
+void menu_dep() {
+    int op3;
+
+    do {
+        cout << "\nDepartamento\n";
+        cout << "[1] - Cadastrar Departamento\n";
+        cout << "[2] - Mostrar Departamento\n";
+        cout << "[3] - Atualizar Departamento\n";
+        cout << "[4] - Excluir Departamento\n";
+        cout << "[5] - Salvar Dados em Arquivo\n";
+        cout << "[6] - Lista Arquivos\n";
+        cout << "[0] - sair\n";
+        cout << "Opcao: ";
+        cin >> op3;
+        fflush(stdin);
+
+        switch (op3) {
+
+        case 0: {
+            // Volta ao menu anterior
+            cout << "\nVoltando ao menu anterior\n\n...\n\n";
+            break;
+        }
+        case 1: {
+            cadastro_dept();
+            continue;
+        }
+        case 2: {
+            listar_Depto();
+            continue;
+        }
+        case 3: {
+            atualiza_Dep();
+            continue;
+        }
+        case 4: {
+            excluir_Depto();
+            continue;
+        }
+        default: {
+            cout << "NENHUMA OPÇÃO ESCOLHIDA" << endl;
+        }
+        }
+    } while (op3 != 0);
+}
+
+// Menu para equipamento
+void menu_equip() {
+    int op2;
+
+    do {
+        cout << endl << "EQUIPAMENTO" << endl;
+        cout << "[1] - Cadastrar Equipamento" << endl;
+        cout << "[2] - Mostrar Equipamento" << endl;
+        cout << "[3] - Atualizar Equipamentos" << endl;
+        cout << "[4] - Excluir Equipamento" << endl;
+        cout << "[5] - Salvar Dados em Arquivo" << endl;
+        cout << "[6] - Lista Arquivos" << endl;
+        cout << "[0] - Voltar ao Menu Anterior" << endl;
+        cout << "Opcao: ";
+        cin >> op2;
+        fflush(stdin);
+        switch (op2) {
+        case 0: // Volta ao menu anterior
+            cout << "\nVoltando ao menu \n\n...\n\n";
+            break;
+        case 1: // Cadastro de equipamento
+            cadastro_equip();
+            continue;
+
+        case 2:
+            // procedimento de listar equipamento
+            void listar_equip();
+            continue;
+
+        case 3: // Procedimento de alterar equipamento
+            atualiza_Equip();
+            continue;
+
+        case 4: // Procedimento de excluir equipamento
+            excluir_equip();
+            continue;
+        case 5: // procedimento para salvar dados em um arquivo
+            backup(numEquip);
+            continue;
+        case 6: // procedimento de listar arquivos
+            listar_arquivo();
+            continue;
+        }
+    } while (op2 > 0);
+}
+
+/*Procedimento que mostra o menu de tipo de equipamento*/
+void menu_tipo() {
+    int op2;
+
+    do {
+        cout << "TIPOS DE EQUIPAMENTO" << endl << endl;
+        cout << "[1] - Cadastrar Tipo de Equipamento" << endl;
+        cout << "[2] - Mostrar Tipos de Equipamento" << endl;
+        cout << "[3] - Atualizar Tipos de Equipamentos" << endl;
+        cout << "[4] - Excluir Tipo de Equipamento" << endl;
+        cout << "[5] - Salvar Dados em Arquivo\n";
+        cout << "[6] - Lista Arquivos\n";
+        cout << "[0] - Voltar ao Menu Anterior" << endl;
+        cout << "Opcao: ";
+        cin >> op2;
+        fflush(stdin);
+
+        switch (op2) {
+        case 0: { // Volta ao menu anterior
+            cout << "Voltando ao menu anterior" << endl;
+            break;
+        }
+        case 1:
+            /*Chamando o procedimento que faz o cadastros*/
+            cadastro_tipo();
+            continue;
+        case 2: {
+            // Chamar procedimento q imprime os tipos de equipamentos
+            listar_tipo();
+            continue;
+        }
+        case 3: {
+            /*Procedimento que atualiza o tipo de equipamento*/
+            atualiza_Tipo();
+            continue;
+        }
+        case 4: {
+            // chamar procedimento que exclui tipo de equipamento
+            excluir_tipo();
+            continue;
+        case 5: // procedimentos de salvar dados em um arquivo*/
+            backup(numEquip);
+            continue;
+        case 6: // procedimento de listar o arquivo
+            listar_arquivo();
+            continue;
+        }
+        }
+    } while (op2 != 0);
+}
+
+// MENU Principal
+void MENU_main() {
+    // Declaração e atribuição de valor às variáveis
+    int op;
+    // Criação do Menu de inicialização do programa
+    cout << "\nSeja bem-vindo!" << endl;
+
+    do {
+        cout << "\n\t\tMENU PRINCIPAL\n\n"
+            "\t\tBEM VINDO!!\n\n"
+            "\tESCOLHA O QUE DESEJA:\n"
+            "\t[1] - TIPOS DE EQUIPAMENTOS\n"
+            "\t[2] - DEPARTAMENTOS\n"
+            "\t[3] - EQUIPAMENTOS\n"
+            "\t[0] - SAIR\n";
+
+        cout << "\n\tDigite: ";
+        cin >> op;
+        fflush(stdin);
+
+        switch (op) {
+        case 0: {
+            // Volta ao menu anterior
+            cout << "\nVoltando ao menu anterior\n\n...\n\n";
+            break;
+        }
+
+        case 1: {
+            menu_tipo();
+            continue;
+        }
+
+        case 2: {
+            menu_dep();
+            continue;
+        }
+
+        case 3: {
+            menu_equip();
+            continue;
+        }
+        default: {
+            cout << "NENHUMA OPCAO ESCOLHIDA";
+            continue;
+        }
+               system("cls");
+        }
+    } while (op != 0);
+}
+
+/*****************************
+
+MENUS COM A API DE FALA
+  implementar a API en todos os menus abaixo
+
+*****************************/
+
+// Menu para equipamento com API
+void menu_equip_fala() {
+    string op2;
+    const char* OP;
+
+    do {
+        cout << endl << "EQUIPAMENTO" << endl;
+        texto_fala("EQUIOAMENTO");
+        cout << "[1] - Cadastrar Equipamento" << endl;
+        texto_fala("Opcao 1  Cadastrar Equipamento");
+        cout << "[2] - Mostrar Equipamento" << endl;
+        texto_fala("Opcao 2 Mostrar Equioamento");
+        cout << "[3] - Atualizar Equipamentos" << endl;
+        texto_fala("Opcao 3 Atualizar Equioamentos");
+        cout << "[4] - Excluir Equipamento" << endl;
+        texto_fala("Opcao 4 Excluir Equipamento");
+        cout << "[5] - Salvar Dados em Arquivo" << endl;
+        texto_fala("Opcao 5 Salvar Dados em Arquivo");
+        cout << "[6] - Lista Arquivos" << endl;
+        texto_fala("Opcao 6 Listar Arquivos");
+        cout << "[0] - Voltar ao Menu Anterior" << endl;
+        texto_fala("Opcao 0 Voltar ao Menu Principal");
+        cout << "Opcao: " << endl;
+        texto_fala("Fale oq deseja fazer");
+        // cin >> op2;
+        op2 = fala_texto();
+        OP = op2.c_str();
+
+        switch (OP[0]) {
+        case '0': // Volta ao menu anterior
+            cout << "\nVoltando ao menu \n\n...\n\n";
+            texto_fala("Voltando ao menu");
+            break;
+        case '1': // Cadastro de equipamento
+            cadastro_equip_fala();
+            continue;
+
+        case '2':
+            // procedimento de listar equipamento
+            continue;
+
+        case '3': // Procedimento de alterar equipamento
+            atualiza_Equip_fala();
+            continue;
+
+        case '4': // Procedimento de excluir equipamento
+            excluir_equip_fala();
+            continue;
+        case '5': // procedimento que salva dados em um arquivo
+            backup(numEquip);
+            continue;
+
+        case '6': // procedimento para listar arquivo*/
+
+            continue;
+        }
+    } while (OP[0] != '0');
+}
+
+// Menu para departamento, com a API de FALA
+void menu_dep_fala() {
+    string op2;
+    const char* OP;
+
+    do {
+        cout << "Departamento" << endl << endl;
+        texto_fala("Departamento");
+        cout << "[1] - Cadastrar Departamento" << endl;
+        texto_fala("1 Cadastrar Departamento");
+        cout << "[2] - Mostrar Departamento" << endl;
+        texto_fala("2 Mostrar Departamento");
+        cout << "[3] - Atualizar Departamento" << endl;
+        texto_fala("3 Atualizar Departamento");
+        cout << "[4] - Excluir Departamento" << endl;
+        texto_fala("4 Excluir Departamento");
+        cout << "[5] - Salvar Dados em Arquivo" << endl;
+        texto_fala("5 Slavar Dados em Arquivo");
+        cout << "[6] - Lista Arquivos" << endl;
+        texto_fala("6 Listar Arquivos");
+        cout << "[0] - sair" << endl;
+        texto_fala("0 Sair");
+        cout << "Opcao: " << endl;
+        op2 = fala_texto();
+        OP = op2.c_str();
+
+        switch (OP[0]) {
+
+        case '0': {
+            // Volta ao menu anterior
+            cout << "\nVoltando ao menu anterior\n\n...\n\n";
+            texto_fala("Voltando ao menu anterior");
+            break;
+        }
+        case '1': {
+            /*Procedimento que faz o cadastros com a api de fala*/
+            cadastro_dep_fala();
+            continue;
+        }
+        case '2': {
+            // Procedimento que cita os departamentos
+            listar_dep_fala();
+            continue;
+        }
+        case '3': {
+            /*Função que atualiza o departamento com a api de fala*/
+            atualiza_dep_fala();
+            continue;
+        }
+        case '4': {
+            /*Função q exclui departamento com a api de fala*/
+            excluir_dep_fala();
+            continue;
+        }
+        default: {
+            cout << "NENHUMA OPCAO ESCOLHIDA" << endl;
+            texto_fala("Nenhuma opcao escolhida");
+        }
+        }
+    } while (OP[0] != '0');
+}
+
+// Menu tipo de equipamento com a API de FALA
+void menu_tipo_fala() {
+    string op2;
+    const char* OP;
+
+    do {
+        cout << "TIPOS DE EQUIPAMENTO" << endl << endl;
+        texto_fala("TIPOS DE EQUIPAMENTOS");
+        cout << "[1] - Cadastrar Tipo de Equipamento" << endl;
+        texto_fala("1 Cadastrar Tipo de Equipamento");
+        cout << "[2] - Mostrar Tipos de Equipamento" << endl;
+        texto_fala("2 Mostrar Tipos de Equipamento");
+        cout << "[3] - Atualizar Tipos de Equipamentos" << endl;
+        texto_fala("3 Atualizar Tipo de Equipamento");
+        cout << "[4] - Excluir Tipo de Equipamento" << endl;
+        texto_fala("4 Excluir Tipo de Equioamento");
+        cout << "[5] - Salvar Dados em Arquivo\n";
+        texto_fala("5 Salavar Dados em Arquivo");
+        cout << "[6] - Lista Arquivos\n";
+        texto_fala("6 Lista Arquivo");
+        cout << "[0] - Voltar ao Menu Anterior" << endl;
+        texto_fala("0 Voltar ao menu Anterios");
+        cout << "Opcao: ";
+        texto_fala("Diga Sua opcao");
+        op2 = fala_texto();
+        OP = op2.c_str();
+        // fflush(stdin);
+
+        switch (OP[0]) {
+        case '0': { // Volta ao menu anterior
+            cout << "Voltando ao menu anterior" << endl;
+            texto_fala("Voltando ao menu anterior");
+            break;
+        }
+        case '1':
+            cadastro_tipo_fala();
+            continue;
+        case '2': {
+            listar_tipo_fala();
+            continue;
+        }
+        case '3': {
+            atualiza_Tipo_fala();
+            continue;
+        }
+        case '4': {
+            excluir_tipo_fala();
+            continue;
+        }
+        }
+    } while (OP[0] != '0');
+}
+
+// MENU main, só q com a API
+void MENU_main_fala() {
+    // Declaração e atribuição de valor às variáveis
+    string op2;
+    const char* OP;
+
+    do {
+        cout << "\n\t\tMENU PRINCIPAL\n\n"
+            "\t\tBEM VINDO!!\n\n"
+            "\tESCOLHA O QUE DESEJA:\n"
+            "\t[1] - TIPOS DE EQUIPAMENTOS\n"
+            "\t[2] - DEPARTAMENTOS\n"
+            "\t[3] - EQUIPAMENTOS\n"
+            "\t[0] - SAIR\n";
+        texto_fala("MENU PRINCIPAL"
+            "BEM VINDO!!"
+            "ESCOLHA O QUE DESEJA FAZER"
+            "1 TIPOS DE EQUIPAMENTOS"
+            "2 DEPARTAMENTOS"
+            "3 EQUIPAMENTOS"
+            "0 SAIR");
+
+        cout << "\n\tFale: ";
+        texto_fala("Fale");
+        op2 = fala_texto();
+        OP = op2.c_str();
+
+        switch (OP[0]) {
+        case '1': {
+            menu_tipo_fala();
+            continue;
+        }
+
+        case '2': {
+            menu_dep_fala();
+            continue;
+        }
+
+        case '3': {
+            menu_equip_fala();
+            continue;
+        }
+        default: {
+            cout << "NENHUMA OPCAO ESCOLHIDA";
+            texto_fala("Nenhuma opcao escolhida");
+            continue;
+        }
+        }
+    } while (OP[0] != '0');
+}
+
+int main() {
+    string op2;
+    const char* OP;
+    // int op;
+    setlocale(LC_ALL, "pt-BR");
+    autenticacao->SetSpeechRecognitionLanguage("pt-BR");
+    autenticacao->SetSpeechSynthesisLanguage("pt-BR");
+    autenticacao->SetSpeechSynthesisVoiceName("pt-BR-AntonioNeural");
+    req_textofala = SpeechSynthesizer::FromConfig(autenticacao);
+    req_falatexto = SpeechRecognizer::FromConfig(autenticacao, audio_config);
+
+    do {
+        texto_fala("Como deseja utilizar o programa?");
+        cout << "Como deseja utilizar o programa?" << endl;
+        texto_fala("[0] - sair do programa\n");
+        cout << "[0] - sair do programa\n" << endl;
+        texto_fala("[1] - Sem Comandos de Voz\n");
+        cout << "[1] - Sem Comandos de Voz\n" << endl;
+        texto_fala("[2] - Com Comandos de Voz\n");
+        cout << "[2] - Com Comandos de Voz\n" << endl;
+        texto_fala("Opcao: ");
+        cout << "Opcao: " << endl;
+        op2 = fala_texto();
+        // cout << op2 << endl;
+        OP = op2.c_str();
+        // op = converter_quantidade(OP);
+        // cout << op << endl;
+        // fflush(stdin);
+
+        switch (OP[0]) {
+        case '0': { // Encerra o programa
+            texto_fala("\nVoce saiu do programa");
+            continue;
+        }
+        case '1': { // CRUD Tipo de Equipamento
+            MENU_main();
+            continue;
+        }
+        case '2': { // MENU com comando de voz
+            MENU_main_fala();
+            continue;
+        }
+        default: {
+            texto_fala("\nOpcao Invalida\n");
+            continue;
+        }
+        }
+    } while (OP[0] != '0');
+    return 0;
+}
